@@ -16,7 +16,7 @@ namespace GameOfLife
 
         public void Move(Cell[,] grid)
         {
-            List<int[]> possibleGfLocations = new List<int[]>();
+            List<int[]> possibleGfLocations = new List<int[]>(); 
             int[] possibleGf;
             int[] preyCoor;
 

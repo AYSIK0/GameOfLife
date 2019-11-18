@@ -19,6 +19,12 @@ namespace GameOfLife
             width = W;
             startGreenflyNums = GFs;
             startLadybirdNums = LBs;
+            timeStep = -1;
+        }
+
+        public int Width
+        {
+            get { return width; }
         }
 
         public void Draw()
@@ -188,5 +194,7 @@ namespace GameOfLife
             int L = ladyBirds.Count;
             return new int[2] { G, L };
         }
+
+        // ADD Information method.
     }
 }

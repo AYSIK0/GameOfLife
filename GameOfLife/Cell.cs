@@ -16,5 +16,28 @@ namespace GameOfLife
             content = ' ';
         }
 
+        //public void ChangeStatus()
+        //{
+
+        //}
+
+        //public void ChangeContent()
+        //{
+        //    if (status == 1) // Greenfly
+        //    {
+        //        content = GreenFly.shape;
+        //    }
+
+        //    else if (status == 2) // LadyBird
+        //    {
+        //        content = LadyBird.shape;
+        //    }
+
+        //    else if (status == 3)
+        //    {
+        //        content = ' ';
+        //    }
+        //}
+
     }
 }
