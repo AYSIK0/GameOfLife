@@ -29,7 +29,6 @@ namespace GameOfLife
 
         public void Draw()
         {
-            Generate();
             for (int i = 0; i < cells.GetLength(0); i++)
             {
                 Console.Write("|");
@@ -63,6 +62,7 @@ namespace GameOfLife
                         cells[i, j] = c;
                     }
                 }
+
                 Random rand = new Random();
 
                 for (int L = 0; L < startLadybirdNums; L++)
@@ -146,8 +146,6 @@ namespace GameOfLife
 
         public void ChangeLadyBirds()
         {
-            // MOVE PART FOR LadyBirds.
-
             for (int L = ladyBirds.Count - 1; L >= 0; L--)
             {
                 LadyBird currentLb = ladyBirds[L];

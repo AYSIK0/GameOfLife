@@ -13,7 +13,7 @@ namespace GameOfLife
 
         public void Move(Cell[,] grid)
         {
-            int randDir = rand.Next(0, 4); // Min = 0 || Max = 3.
+            int randDir = rand.Next(0, 4); // Min = 0 ||| Max = 3.
             int[] nextcell = GetNeighbourCoor(randDir, row, column);
 
             while (nextcell[0] >= grid.GetLength(0) || nextcell[0] < 0 || nextcell[1] >= grid.GetLength(1) || nextcell[1] < 0)
@@ -74,10 +74,8 @@ namespace GameOfLife
                     index = i;
                     break;
                 }
-
             }
             gflies.RemoveAt(index);
-
         }
     }
 }

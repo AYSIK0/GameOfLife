@@ -3,7 +3,7 @@ namespace GameOfLife
 {
     public class Cell
     {
-        private int row, columns;
+        private int row, column;
         public int status; // Why do we need status
         public char content;
 
@@ -11,15 +11,18 @@ namespace GameOfLife
         public Cell(int r, int c, int stat)
         {
             row = r;
-            columns = c;
+            column = c;
             status = stat;
             content = ' ';
         }
 
-        //public void ChangeStatus()
-        //{
-
-        //}
+        public void ChangeStatus()
+        {
+            if (status == 3)
+            {
+                content = ' ';
+            }
+        }
 
         //public void ChangeContent()
         //{

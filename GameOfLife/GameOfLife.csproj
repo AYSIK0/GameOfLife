@@ -37,6 +37,7 @@
     <Compile Include="GreenFly.cs" />
     <Compile Include="World.cs" />
     <Compile Include="LadyBird.cs" />
+    <Compile Include="Game.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
