@@ -13,6 +13,8 @@ namespace GameOfLife
 
         public void Move(Cell[,] grid)
         {
+            /// First we get random coo
+
             int randDir = rand.Next(0, 4); // Min = 0 ||| Max = 3.
             int[] nextcell = GetNeighbourCoor(randDir, row, column);
 
@@ -23,7 +25,7 @@ namespace GameOfLife
             }
 
 
-            if (grid[nextcell[0], nextcell[1]].content == ' ') // if the next cell is empty than move the greenfly.
+            if (grid[nextcell[0], nextcell[1]].content == ' ') // if the next cell is empty then move the greenfly.
             {
                 grid[row, column].content = ' ';
                 row = nextcell[0];
@@ -69,7 +71,7 @@ namespace GameOfLife
 
         public static void KillGreenFly(List<GreenFly> gflies, int r, int c)
         {
-            int index = -1; // may use -1.
+            int index = -1; 
             for (int i = 0; i < gflies.Count; i++)
             {
                 if (gflies[i].row == r && gflies[i].column == c)
@@ -80,5 +82,6 @@ namespace GameOfLife
             }
             gflies.RemoveAt(index);
         }
+
     }
 }

@@ -5,6 +5,7 @@ namespace GameOfLife
     public class Game
     {
         private World world;
+        private byte startOption;
         private uint rows, cols, gfs, lbs, numsOfCells, numsOfCreatures;
         private uint simulationSpeed, mode;
 
@@ -42,69 +43,100 @@ namespace GameOfLife
             Console.WriteLine("2.Ladybirds 'x' ,can eat greenflies or move each turn, if it didn't eat any greenflies in the last 3 turns it dies. it can breed after 8 turns.");
             Console.WriteLine("3.Greenflies 'o', can only moves and breed after 3 turns.");
             Console.WriteLine("4.Make sure that the total number of cell is equal or bigger than the number of greenflies and ladybirds combined!!");
-            Console.WriteLine("5.Simulation Speed must be bigger than 1.");
+            Console.WriteLine("5.Simulation Speed must be bigger than 0.");
             Console.WriteLine("6.There are only Two Display Modes 0 (Grid is drawn every time) and 1 (Only the final grid is drawn).");
+            Console.WriteLine("7.You can choose between 2 start options 0: Default and 1: Custom");
             Console.WriteLine("-----------------------------------------------------------------------------------------------------");
 
-            // Rule1: All the inputs must be int the right form.
-            // Rule2: The number of cells is less than the number of all creatures (Greenfliers + Ladybirds)
-            bool inputsCorrect, cellsLessThanCreatures; 
+            bool startOptionIsValid;
             do
             {
-                Console.Title = "Game Of Life";
-                Console.WriteLine();
-                Console.WriteLine();
+                startOptionIsValid = true;
                 try
                 {
-                    Console.Write("Enter number of Rows: ");
-                    rows = Convert.ToUInt32(Console.ReadLine());
-
-                    Console.Write("Enter number of Columns: ");
-                    cols = Convert.ToUInt32(Console.ReadLine());
-
-                    Console.Write("Enter number of GreenFlies: ");
-                    gfs = Convert.ToUInt32(Console.ReadLine());
-
-                    Console.Write("Enter number of LadyBirds: ");
-                    lbs = Convert.ToUInt32(Console.ReadLine());
-
-                    Console.Write("Enter simulation speed: ");
-                    simulationSpeed = Convert.ToUInt32(Console.ReadLine());
-
-                    Console.Write("Choose Display mode(0 or 1): ");
-                    mode = Convert.ToUInt32(Console.ReadLine());
-
-                    inputsCorrect = true;
+                    Console.Write("\nChoose Start Option 0(default) or 1(custom): ");
+                    startOption = Convert.ToByte(Console.ReadLine());
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Rows, columns, simulation speed and number of Greenflies and Ladybirds must be a positive Integer!!");
-                    inputsCorrect = false;
+                    Console.WriteLine("You can only choose 0 or 1 !!");
+                    startOptionIsValid = false;
                 }
 
-                if (SimulationSpeed == 0)
+            } while (!startOptionIsValid || startOption != 0 && startOption != 1);
+
+            if (startOption == 0) // Default Start
+            {
+                rows = 20;
+                cols = 20;
+                gfs = 100;
+                lbs = 5;
+                SimulationSpeed = 1;
+                Mode = 0;
+            }
+
+            else // Custom Start
+            {
+                // Rule1 (inputsCorrect): All the inputs must be in the right form.
+                // Rule2 (cellsLessThanCreatures): The number of cells is less than the number of all creatures (Greenfliers + Ladybirds)
+                bool inputsCorrect, cellsLessThanCreatures;
+                do
                 {
-                    Console.WriteLine("\nError,Simulation speed must be bigger than 0!!");
-                    inputsCorrect = false;
-                }
+                    Console.Title = "Game Of Life";
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    try
+                    {
+                        Console.Write("Enter number of Rows: ");
+                        rows = Convert.ToUInt32(Console.ReadLine());
 
-                if (Mode != 0 && Mode != 1)
-                {
-                    Console.WriteLine("\nError,Display mode must be 0 or 1!!");
-                    inputsCorrect = false;
-                }
+                        Console.Write("Enter number of Columns: ");
+                        cols = Convert.ToUInt32(Console.ReadLine());
 
-                numsOfCells = rows * cols;
-                numsOfCreatures = gfs + lbs;
+                        Console.Write("Enter number of GreenFlies: ");
+                        gfs = Convert.ToUInt32(Console.ReadLine());
 
-                cellsLessThanCreatures = numsOfCells < numsOfCreatures;
-                if (cellsLessThanCreatures)
-                {
-                    Console.WriteLine("\nError,The number of cells ({0}) is smaller than the Greenflies + Ladybirds ({1})!!", numsOfCells, numsOfCreatures);
-                    Console.WriteLine("Renter correct values!!\n");
-                }
-            } while (!inputsCorrect || cellsLessThanCreatures);
+                        Console.Write("Enter number of LadyBirds: ");
+                        lbs = Convert.ToUInt32(Console.ReadLine());
 
+                        Console.Write("Enter simulation speed: ");
+                        simulationSpeed = Convert.ToUInt32(Console.ReadLine());
+
+                        Console.Write("Choose Display mode(0 or 1): ");
+                        mode = Convert.ToUInt32(Console.ReadLine());
+
+                        inputsCorrect = true;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Rows, columns, simulation speed and number of Greenflies and Ladybirds must be a positive Integer!!");
+                        inputsCorrect = false;
+                    }
+
+                    if (SimulationSpeed == 0)
+                    {
+                        Console.WriteLine("\nError,Simulation speed must be bigger than 0!!");
+                        inputsCorrect = false;
+                    }
+
+                    if (Mode != 0 && Mode != 1)
+                    {
+                        Console.WriteLine("\nError,Display mode must be 0 or 1!!");
+                        inputsCorrect = false;
+                    }
+
+                    numsOfCells = rows * cols;
+                    numsOfCreatures = gfs + lbs;
+
+                    cellsLessThanCreatures = numsOfCells < numsOfCreatures;
+                    if (cellsLessThanCreatures)
+                    {
+                        Console.WriteLine("\nError,The number of cells ({0}) is smaller than the Greenflies + Ladybirds ({1})!!", numsOfCells, numsOfCreatures);
+                        Console.WriteLine("Renter correct values!!\n");
+                    }
+                } while (!inputsCorrect || cellsLessThanCreatures);
+            }
+            
             world = new World((int)rows, (int)cols, (int)gfs, (int)lbs);
             Draw();
         }
@@ -149,9 +181,9 @@ namespace GameOfLife
             } while (redraw);
         }
 
-        public void Draw()
+        private void Draw()
         {
-            if (Mode == 0) // The First Mode where every grid will be drawn.
+            if (Mode == 0) // The First Display Mode, every grid will be drawn.
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {
@@ -161,7 +193,7 @@ namespace GameOfLife
                 }
             }
 
-            else if (Mode == 1) //The Second Mode where only the last grid will be drawn. 
+            else if (Mode == 1) //The Second Display Mode, only the last grid will be drawn. 
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {

@@ -12,7 +12,7 @@ namespace GameOfLife
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladyBirds = new List<LadyBird>();
-
+ 
         int highestNumOfGf = 0, highestNumOfLd = 0;
         float avergaeNumOfGf = 0, avergaeNumOfLd = 0;
 
@@ -73,13 +73,14 @@ namespace GameOfLife
                 }
 
                 // GreenFlies and Ladybirds are created randomly throughout the grid.
+
                 Random rand = new Random();
-                for (int L = 0; L < startLadybirdNums; L++)
+                for (int L = 0; L < startLadybirdNums; L++) // Creating Ladybirds.
                 {
                     int randX = rand.Next(0, length);
                     int randY = rand.Next(0, width);
 
-                    if (CellIsEmpty(randX, randY))
+                    if (CellIsEmpty(randX, randY)) 
                     {
                         LadyBird ladyBird = new LadyBird(randX, randY);
                         ladyBirds.Add(ladyBird);
@@ -87,7 +88,7 @@ namespace GameOfLife
                     }
                     else
                     {
-                        while (!CellIsEmpty(randX, randY))
+                        while (!CellIsEmpty(randX, randY)) // keep looping until en empty cell is found.
                         {
                             randX = rand.Next(0, length);
                             randY = rand.Next(0, width);
@@ -98,7 +99,7 @@ namespace GameOfLife
                     }
                 }
 
-                for (int G = 0; G < startGreenflyNums; G++)
+                for (int G = 0; G < startGreenflyNums; G++) //Creating Greenflies.
                 {
                     int randX = rand.Next(0, length);
                     int randY = rand.Next(0, width);
@@ -187,14 +188,13 @@ namespace GameOfLife
             }
         }
 
-        public int[] CheckTheCount() 
+        public int[] CheckTheCount() // Return the number of greenflies and ladybirds.
         {
             int G = greenflies.Count;
             int L = ladyBirds.Count;
             return new int[2] { G, L };
         }
 
-        //ADD Information method.
         public void Information()
         {
 
