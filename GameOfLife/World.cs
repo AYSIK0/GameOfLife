@@ -13,13 +13,15 @@ namespace GameOfLife
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladyBirds = new List<LadyBird>();
 
+        int highestNumOfGf = 0, highestNumOfLd = 0;
+        float avergaeNumOfGf = 0, avergaeNumOfLd = 0;
+
         public World(int L, int W, int GFs, int LBs)
         {
             length = L;
             width = W;
             startGreenflyNums = GFs;
             startLadybirdNums = LBs;
-            timeStep = -1;
         }
 
         public int Width
@@ -48,23 +50,30 @@ namespace GameOfLife
 
         public void Generate()
         {
-            // The "if" part run only the first time when the grid is empty.
-            // GreenFlies and Ladybirds are created randomly.
+            /// The method generate the world, it has two parts:
+            /// 1. When the world is empty (else part).
+            /// 2. When the world has been craeted (if part) the method will call other methods to make the neccessary changes.
 
-            if (cells == null)
+            if (cells != null)
             {
+                ChangeLadybirds();
+                ChangeGreenflies();
+            }
+
+            else
+            {
+                timeStep = 0;
                 cells = new Cell[length, width];
                 for (int i = 0; i < cells.GetLength(0); i++)
                 {
                     for (int j = 0; j < cells.GetLength(1); j++)
                     {
-                        Cell c = new Cell(i, j, 3);
-                        cells[i, j] = c;
+                        cells[i, j] = new Cell(i, j, 3);
                     }
                 }
 
+                // GreenFlies and Ladybirds are created randomly throughout the grid.
                 Random rand = new Random();
-
                 for (int L = 0; L < startLadybirdNums; L++)
                 {
                     int randX = rand.Next(0, length);
@@ -113,19 +122,11 @@ namespace GameOfLife
                         cells[randX, randY].content = greenfly.shape;
                     }
                 }
-
             }
-
-            else
-            {
-                ChangeLadyBirds();
-                ChangeGreenFlies();
-            }
-
-            //information();
+            Information();
         }
 
-        public void ChangeGreenFlies()
+        public void ChangeGreenflies()
         {
             int gfNums = greenflies.Count;
             for (int G = 0; G < gfNums; G++)
@@ -144,7 +145,7 @@ namespace GameOfLife
             }
         }
 
-        public void ChangeLadyBirds()
+        public void ChangeLadybirds()
         {
             for (int L = ladyBirds.Count - 1; L >= 0; L--)
             {
@@ -186,13 +187,52 @@ namespace GameOfLife
             }
         }
 
-        public int[] checkTheCount() 
+        public int[] CheckTheCount() 
         {
             int G = greenflies.Count;
             int L = ladyBirds.Count;
             return new int[2] { G, L };
         }
 
-        // ADD Information method.
+        //ADD Information method.
+        public void Information()
+        {
+
+            if (highestNumOfLd < ladyBirds.Count)
+            {
+                highestNumOfLd = ladyBirds.Count;
+            }
+
+            if (highestNumOfGf < greenflies.Count)
+            {
+                highestNumOfGf = greenflies.Count;
+            }
+
+            //if (timeStep > 0) // needs more work
+            //{
+            //    avergaeNumOfGf = Convert.ToSingle(highestNumOfGf) / Convert.ToSingle(timeStep);
+            //    avergaeNumOfLd = Convert.ToSingle(highestNumOfLd) / Convert.ToSingle(timeStep);
+            //}
+        }
+
+        public void WriteToFile()
+        {
+            //NOt Working.!!!!
+            string fileName = "Information.txt";
+            string currentDir = Directory.GetCurrentDirectory();
+            string pathString = Path.Combine(currentDir, fileName);
+
+            StreamWriter file = new StreamWriter(pathString);
+            file.WriteLine("General Information About The simulation\n");
+            file.WriteLine("Number of Steps: " + timeStep);
+            file.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
+            file.WriteLine("Highest Number of Ladybirds: " + highestNumOfLd);
+            //file.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
+            //file.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLd);
+
+            //file.WriteLine(currentDir + "    " + pathString);
+            file.Close();
+        }
+
     }
 }

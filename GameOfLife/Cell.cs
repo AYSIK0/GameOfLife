@@ -4,7 +4,7 @@ namespace GameOfLife
     public class Cell
     {
         private int row, column;
-        public int status; // Why do we need status
+        public int status; // Why do we need status!!!
         public char content;
 
 

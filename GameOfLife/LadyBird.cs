@@ -16,28 +16,27 @@ namespace GameOfLife
 
         public void Move(Cell[,] grid)
         {
-            List<int[]> possibleGfLocations = new List<int[]>(); 
-            int[] possibleGf;
+            List<int[]> preyLocations = new List<int[]>(); 
             int[] preyCoor;
 
             for (int i = 0; i < 4; i++)
             {
-                possibleGf = GetNeighbourCoor(i, row, column);
+                preyCoor = GetNeighbourCoor(i, row, column);
 
-                if (possibleGf[0] >= 0 && possibleGf[0] < grid.GetLength(0) && possibleGf[1] >= 0 && possibleGf[1] < grid.GetLength(1))
+                if (preyCoor[0] >= 0 && preyCoor[0] < grid.GetLength(0) && preyCoor[1] >= 0 && preyCoor[1] < grid.GetLength(1))
                 {
                     // Can wes just another and(&&) in the first if.
-                    if (grid[possibleGf[0], possibleGf[1]].content == 'o')
+                    if (grid[preyCoor[0], preyCoor[1]].content == 'o')
                     {
-                        possibleGfLocations.Add(possibleGf);
+                        preyLocations.Add(preyCoor);
                     }
                 }
             }
 
-            if (possibleGfLocations.Count > 0)
+            if (preyLocations.Count > 0)
             {
-                int randCell = rand.Next(0, possibleGfLocations.Count);
-                preyCoor = possibleGfLocations[randCell];
+                int randCell = rand.Next(0, preyLocations.Count);
+                preyCoor = preyLocations[randCell];
 
                 grid[row, column].content = ' ';
 
@@ -52,7 +51,7 @@ namespace GameOfLife
 
             else
             {
-                int randDir = rand.Next(0, 4); // Min = 0 || Max = 3.
+                int randDir = rand.Next(0, 4); // Min = 0 ||| Max = 3.
                 int[] nextcell = GetNeighbourCoor(randDir, row, column);
 
                 while (nextcell[0] >= grid.GetLength(0) || nextcell[0] < 0 || nextcell[1] >= grid.GetLength(1) || nextcell[1] < 0)
@@ -63,7 +62,7 @@ namespace GameOfLife
 
                 if (grid[nextcell[0], nextcell[1]].content == ' ') // if the next cell is empty than move the ladybird.
                 {
-                    grid[row, column].content = ' '; // X and Y will still be same (orignal location of ladybird).
+                    grid[row, column].content = ' '; // Emptying the orignal location of ladybird since it moved.
                     row = nextcell[0];
                     column = nextcell[1];
                     grid[row, column].content = shape;
@@ -83,8 +82,7 @@ namespace GameOfLife
             {
                 breedCell = GetNeighbourCoor(i, row, column);
 
-                // We need to make sure that X and Y are between 0 and 20 first
-
+                // Checks if the cell exist within the grid (row and column are between 0 and 19)
                 if ((breedCell[0] < grid.GetLength(0) && breedCell[0] >= 0) && (breedCell[1] < grid.GetLength(1) && breedCell[1] >= 0))
                 {
                     if (grid[breedCell[0], breedCell[1]].content == ' ')
@@ -96,7 +94,7 @@ namespace GameOfLife
 
             if (possibleCells.Count > 0)
             {
-                int randBreedCell = rand.Next(0, possibleCells.Count); // Min = 0 || Maxpossible = 0 or 1 or 2 or 3.
+                int randBreedCell = rand.Next(0, possibleCells.Count); // Min = 0 ||| Maxpossible = 0 or 1 or 2 or 3.
                 breedCell = possibleCells[randBreedCell];
 
                 LadyBird nextLB = new LadyBird(breedCell[0], breedCell[1]);

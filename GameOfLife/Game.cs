@@ -34,7 +34,7 @@ namespace GameOfLife
             }
         }
 
-        public void start()
+        public void Start()
         {
             // General Information about the game.
             Console.WriteLine("This a Simulation of the Game of Life, the main parts of it are: ");
@@ -43,7 +43,7 @@ namespace GameOfLife
             Console.WriteLine("3.Greenflies 'o', can only moves and breed after 3 turns.");
             Console.WriteLine("4.Make sure that the total number of cell is equal or bigger than the number of greenflies and ladybirds combined!!");
             Console.WriteLine("5.Simulation Speed must be bigger than 1.");
-            Console.WriteLine("6.There are only Two Display Modes 0 (Grid is drawing every time) and 1 (Only the final grid is drawing)");
+            Console.WriteLine("6.There are only Two Display Modes 0 (Grid is drawn every time) and 1 (Only the final grid is drawn).");
             Console.WriteLine("-----------------------------------------------------------------------------------------------------");
 
             // Rule1: All the inputs must be int the right form.
@@ -116,7 +116,7 @@ namespace GameOfLife
             {
                 ConsoleKeyInfo k = Console.ReadKey();
 
-                if (k.Key == ConsoleKey.S) // When the user press 's' they will be able to change the simulatin speed and Display mode.
+                if (k.Key == ConsoleKey.S) // When the user press 's' they will be able to change the simulation speed and Display mode.
                 {
                     try
                     {
@@ -142,7 +142,7 @@ namespace GameOfLife
                 else if (k.Key == ConsoleKey.Escape)
                 {
                     redraw = false;
-                    //world.WriteToFile();
+                    //world.WriteToFile(); !!!!!!!!!!!!!!!!!!!!
                     Console.WriteLine("\n You Exited the Game.");
                 }
 
@@ -178,7 +178,7 @@ namespace GameOfLife
             Console.WriteLine(" " + line);
             world.Draw();
             Console.WriteLine(" " + line);
-            int[] count = world.checkTheCount();
+            int[] count = world.CheckTheCount();
             Console.WriteLine("\nGreenFlies: " + count[0] + "|||" + "Ladybirds: " + count[1] + "|||" + "TimeStep: " + world.timeStep + "|||" + "Speed: " + SimulationSpeed + "|||" + "Mode: " + Mode);
             Console.WriteLine("To change settings press (s), To continue press Enter, otherwise press Escape (ESC) key to end the game.");
             Console.WriteLine();
