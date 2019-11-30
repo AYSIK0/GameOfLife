@@ -29,38 +29,40 @@ namespace GameOfLife
             get { return width; }
         }
 
-        public void Draw()
+        public void Draw() // Draws The world.
         {
             for (int i = 0; i < cells.GetLength(0); i++)
             {
                 Console.Write("|");
+
                 for (int j = 0; j < cells.GetLength(1); j++)
                 {
-                    if (j == cells.GetLength(1) - 1)
-                    {
-                        Console.WriteLine(cells[i, j].content + "|");
-                    }
-                    else
+                    if (j != cells.GetLength(1) - 1)
                     {
                         Console.Write(cells[i, j].content);
                     }
-                }
-            }
+                    else
+                    {
+                        Console.WriteLine(cells[i, j].content + "|");
+                        
+                    }
+                } // j
+            } // i
         }
 
-        public void Generate()
+        public void Generate() // This method Create the world each turn.
         {
             /// The method generate the world, it has two parts:
             /// 1. When the world is empty (else part).
             /// 2. When the world has been craeted (if part) the method will call other methods to make the neccessary changes.
 
-            if (cells != null)
+            if (cells != null) // [2]
             {
                 ChangeLadybirds();
                 ChangeGreenflies();
             }
 
-            else
+            else //[1]
             {
                 timeStep = 0;
                 cells = new Cell[length, width];
@@ -68,7 +70,7 @@ namespace GameOfLife
                 {
                     for (int j = 0; j < cells.GetLength(1); j++)
                     {
-                        cells[i, j] = new Cell(i, j, 3);
+                        cells[i, j] = new Cell(i, j);
                     }
                 }
 
@@ -124,10 +126,11 @@ namespace GameOfLife
                     }
                 }
             }
+
             Information();
         }
 
-        public void ChangeGreenflies()
+        private void ChangeGreenflies() // This method Move and Breed GreenFlies.
         {
             int gfNums = greenflies.Count;
             for (int G = 0; G < gfNums; G++)
@@ -146,14 +149,14 @@ namespace GameOfLife
             }
         }
 
-        public void ChangeLadybirds()
+        private void ChangeLadybirds() // This method Move and Breed Ladybirds.
         {
             for (int L = ladyBirds.Count - 1; L >= 0; L--)
             {
                 LadyBird currentLb = ladyBirds[L];
                 currentLb.lifeTime++;
 
-                if (currentLb.notEating == 3)
+                if (currentLb.notEating == 3) // Checking if the ladybird has starved.
                 {
                     cells[currentLb.row, currentLb.column].content = ' '; // I can also change the state to 3(Empty)
                     ladyBirds.Remove(currentLb);
@@ -162,12 +165,13 @@ namespace GameOfLife
 
                 // MOVE Part for LadyBirds.
                 currentLb.Move(cells);
+
                 if (currentLb.eat)
                 {
                     GreenFly.KillGreenFly(greenflies, currentLb.row, currentLb.column);
                 }
 
-                // BREED PART For LadyBirds.
+                // BREED Part For LadyBirds.
                 if (currentLb.lifeTime != 0 && currentLb.lifeTime % 8 == 0)
                 {
                     currentLb.Breed(cells, ladyBirds);
@@ -188,7 +192,7 @@ namespace GameOfLife
             }
         }
 
-        public int[] CheckTheCount() // Return the number of greenflies and ladybirds.
+        public int[] GetTheCounts() // Return the current number of Greenflies and Ladybirds in the grid.
         {
             int G = greenflies.Count;
             int L = ladyBirds.Count;

@@ -54,7 +54,7 @@ namespace GameOfLife
                 startOptionIsValid = true;
                 try
                 {
-                    Console.Write("\nChoose Start Option 0(default) or 1(custom): ");
+                    Console.Write("\nChoose Start Option 0 (default) or 1 (custom): ");
                     startOption = Convert.ToByte(Console.ReadLine());
                 }
                 catch (Exception)
@@ -113,18 +113,6 @@ namespace GameOfLife
                         inputsCorrect = false;
                     }
 
-                    if (SimulationSpeed == 0)
-                    {
-                        Console.WriteLine("\nError,Simulation speed must be bigger than 0!!");
-                        inputsCorrect = false;
-                    }
-
-                    if (Mode != 0 && Mode != 1)
-                    {
-                        Console.WriteLine("\nError,Display mode must be 0 or 1!!");
-                        inputsCorrect = false;
-                    }
-
                     numsOfCells = rows * cols;
                     numsOfCreatures = gfs + lbs;
 
@@ -134,11 +122,12 @@ namespace GameOfLife
                         Console.WriteLine("\nError,The number of cells ({0}) is smaller than the Greenflies + Ladybirds ({1})!!", numsOfCells, numsOfCreatures);
                         Console.WriteLine("Renter correct values!!\n");
                     }
+
                 } while (!inputsCorrect || cellsLessThanCreatures);
             }
             
             world = new World((int)rows, (int)cols, (int)gfs, (int)lbs);
-            Draw();
+            Simulate();
         }
 
         public void Continue()
@@ -158,17 +147,28 @@ namespace GameOfLife
                         Console.Write("\nDisplay Mode: ");
                         Mode = Convert.ToUInt32(Console.ReadLine());
 
-                        Draw();
+                        Simulate();
                     }
                     catch (Exception)
                     {
                         Console.WriteLine(" Please only Use Positive Integers!!!");
                     }
+
+                    if (SimulationSpeed == 0)
+                    {
+                        Console.WriteLine("\nSimulation speed must be larger than 0!!");
+                    }
+
+                    if (Mode != 0 && Mode != 1)
+                    {
+                        Console.WriteLine("\nDisplay mode must be 0 or 1!!");
+                    }
+
                 }
 
                 else if (k.Key == ConsoleKey.Enter)
                 {
-                    Draw();
+                    Simulate();
                 }
 
                 else if (k.Key == ConsoleKey.Escape)
@@ -181,9 +181,9 @@ namespace GameOfLife
             } while (redraw);
         }
 
-        private void Draw()
+        private void Simulate()
         {
-            if (Mode == 0) // The First Display Mode, every grid will be drawn.
+            if (Mode == 0) // The First Display Mode: Every grid will be drawn.
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {
@@ -193,7 +193,7 @@ namespace GameOfLife
                 }
             }
 
-            else if (Mode == 1) //The Second Display Mode, only the last grid will be drawn. 
+            else if (Mode == 1) //The Second Display Mode: Only the last grid will be drawn. 
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {
@@ -204,13 +204,13 @@ namespace GameOfLife
             }
         }
 
-        private void ConsoleDraw()
+        private void ConsoleDraw() // This method handls how the grid and the inforamtion will be dispalyed on the console.
         {
             string line = new string('-', world.Width);
             Console.WriteLine(" " + line);
             world.Draw();
             Console.WriteLine(" " + line);
-            int[] count = world.CheckTheCount();
+            int[] count = world.GetTheCounts();
             Console.WriteLine("\nGreenFlies: " + count[0] + "|||" + "Ladybirds: " + count[1] + "|||" + "TimeStep: " + world.timeStep + "|||" + "Speed: " + SimulationSpeed + "|||" + "Mode: " + Mode);
             Console.WriteLine("To change settings press (s), To continue press Enter, otherwise press Escape (ESC) key to end the game.");
             Console.WriteLine();

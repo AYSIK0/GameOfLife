@@ -19,6 +19,8 @@ namespace GameOfLife
 
         public int[] GetNeighbourCoor(int direction, int row, int column)
         {
+            // This method return the coordinates of neighbour cells using a direction and coordinates of a creature.
+
             int neighX = 0;
             int neighY = 0;
 
@@ -43,7 +45,7 @@ namespace GameOfLife
                 neighX = row;
             }
 
-            return new int[] { neighX, neighY }; // need to check if X and Y are 0.
+            return new int[] { neighX, neighY }; 
         }
 
     }
