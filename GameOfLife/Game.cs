@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.
 
 namespace GameOfLife
 {
     public class Game
     {
         private World world;
+
         private byte startOption;
         private uint rows, cols, gfs, lbs, numsOfCells, numsOfCreatures;
         private uint simulationSpeed, mode;
@@ -133,6 +136,11 @@ namespace GameOfLife
         public void Continue()
         {
             bool redraw = true;
+            bool newStart = false;
+            DateTime now = DateTime.Now;
+            string fileName = $"Information{now.ToString()}.txt";
+            string currentDir = Directory.GetCurrentDirectory();
+            string pathString = Path.Combine(currentDir, fileName);
             do
             {
                 ConsoleKeyInfo k = Console.ReadKey();
@@ -174,11 +182,25 @@ namespace GameOfLife
                 else if (k.Key == ConsoleKey.Escape)
                 {
                     redraw = false;
-                    //world.WriteToFile(); !!!!!!!!!!!!!!!!!!!!
+                    //world.WriteToNewFile(pathString); //!!!!!!!!!!!!!!!!!!!!
                     Console.WriteLine("\n You Exited the Game.");
                 }
 
+                else if (k.Key == ConsoleKey.N)
+                {
+                    redraw = false;
+                    //world.WriteToSameFile(pathString); //!!!!!!!!!!!!!!!!!!!!
+                    newStart = true;
+                    
+                }
+
             } while (redraw);
+
+            if (newStart == true)
+            {
+                Start();
+                Continue();
+            }
         }
 
         private void Simulate()

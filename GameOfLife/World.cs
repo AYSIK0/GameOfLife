@@ -6,18 +6,22 @@ namespace GameOfLife
 {
     public class World
     {
+        private int id; 
+        public static int nextId = 1;
         private int width, length;
         public Cell[,] cells;
         public int timeStep;
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladyBirds = new List<LadyBird>();
- 
-        int highestNumOfGf = 0, highestNumOfLd = 0;
-        float avergaeNumOfGf = 0, avergaeNumOfLd = 0;
+
+        private int totalNumOfGf = 0, totalNumOfLb = 0;
+        private int highestNumOfGf = 0, highestNumOfLb = 0;
+        private float avergaeNumOfGf = 0, avergaeNumOfLb =  0;
 
         public World(int L, int W, int GFs, int LBs)
         {
+            this.id = nextId++;
             length = L;
             width = W;
             startGreenflyNums = GFs;
@@ -201,10 +205,12 @@ namespace GameOfLife
 
         public void Information()
         {
+            totalNumOfGf += greenflies.Count;
+            totalNumOfLb += ladyBirds.Count;
 
-            if (highestNumOfLd < ladyBirds.Count)
+            if (highestNumOfLb < ladyBirds.Count)
             {
-                highestNumOfLd = ladyBirds.Count;
+                highestNumOfLb = ladyBirds.Count;
             }
 
             if (highestNumOfGf < greenflies.Count)
@@ -212,30 +218,33 @@ namespace GameOfLife
                 highestNumOfGf = greenflies.Count;
             }
 
-            //if (timeStep > 0) // needs more work
-            //{
-            //    avergaeNumOfGf = Convert.ToSingle(highestNumOfGf) / Convert.ToSingle(timeStep);
-            //    avergaeNumOfLd = Convert.ToSingle(highestNumOfLd) / Convert.ToSingle(timeStep);
-            //}
+            if (timeStep > 0) // needs more work
+            {
+                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep);
+                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep);
+            }
         }
 
-        public void WriteToFile()
+        public void WriteToSameFile()
         {
-            //NOt Working.!!!!
             string fileName = "Information.txt";
             string currentDir = Directory.GetCurrentDirectory();
             string pathString = Path.Combine(currentDir, fileName);
 
-            StreamWriter file = new StreamWriter(pathString);
-            file.WriteLine("General Information About The simulation\n");
+            StreamWriter file = File.AppendText(pathString);
+            file.WriteLine("General Information About World {0}.\n", id);
             file.WriteLine("Number of Steps: " + timeStep);
+            file.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
+            file.WriteLine("Start Number for Lqdybirds: {0}", startLadybirdNums);
             file.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
-            file.WriteLine("Highest Number of Ladybirds: " + highestNumOfLd);
-            //file.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
-            //file.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLd);
+            file.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
+            file.WriteLine("Average number of greenflies per turn: " + avergaeNumOfGf);
+            file.WriteLine("Average number of ladybirds per turn: " + avergaeNumOfLb);
+            file.WriteLine("\n");
+            file.Close();
+
 
             //file.WriteLine(currentDir + "    " + pathString);
-            file.Close();
         }
 
     }
