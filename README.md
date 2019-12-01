@@ -45,6 +45,10 @@ When you start you will be asked to choose between 2 start options:
 
 * During the simulation you can press 'S' to change simulation speed and display mode.
 
+* Press 'N' to start a new world.
+
 * To exit the game press Escape key (esc).
 
 * When you finish a game a file named "Information.txt" will be generated, it contains some inforamtion about the simulation.
+
+*N.B Only one information file is created for each game. when you start a new world the information about the previous and current world will be in the same file. (each world has it's own ID)*

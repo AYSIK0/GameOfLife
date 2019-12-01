@@ -232,7 +232,7 @@ namespace GameOfLife
             Console.WriteLine(" " + line);
             int[] count = world.GetTheCounts();
             Console.WriteLine("\nGreenFlies: " + count[0] + "|||" + "Ladybirds: " + count[1] + "|||" + "TimeStep: " + world.timeStep + "|||" + "Speed: " + SimulationSpeed + "|||" + "Mode: " + Mode);
-            Console.WriteLine("To change settings press (s), To continue press Enter, otherwise press Escape (ESC) key to end the game.");
+            Console.WriteLine("To change settings press (s), To continue press Enter, To start a new world press (n),otherwise press Escape (ESC) key to end the game.");
             Console.WriteLine();
             Console.WriteLine();
         }
