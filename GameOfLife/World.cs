@@ -7,25 +7,31 @@ namespace GameOfLife
     public class World
     {
         private int id; 
-        public static int nextId = 1;
+        private static int nextId = 1;
         private int width, length;
         public Cell[,] cells;
         public int timeStep;
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladyBirds = new List<LadyBird>();
+        private static string filePath;
 
+        // This attribute will be the general information about the world.
         private int totalNumOfGf = 0, totalNumOfLb = 0;
         private int highestNumOfGf = 0, highestNumOfLb = 0;
+        private int lowestNumOfGf, lowestNumOfLb;
         private float avergaeNumOfGf = 0, avergaeNumOfLb =  0;
 
         public World(int L, int W, int GFs, int LBs)
         {
             this.id = nextId++;
+            filePath = filePath;
             length = L;
             width = W;
             startGreenflyNums = GFs;
             startLadybirdNums = LBs;
+            lowestNumOfGf = startGreenflyNums;
+            lowestNumOfLb = startLadybirdNums;
         }
 
         public int Width
@@ -203,7 +209,7 @@ namespace GameOfLife
             return new int[2] { G, L };
         }
 
-        public void Information()
+        public void Information() // This method update the Information.
         {
             totalNumOfGf += greenflies.Count;
             totalNumOfLb += ladyBirds.Count;
@@ -218,33 +224,61 @@ namespace GameOfLife
                 highestNumOfGf = greenflies.Count;
             }
 
-            if (timeStep > 0) // needs more work
+            if (lowestNumOfGf > greenflies.Count)
+            {
+                lowestNumOfGf = greenflies.Count;
+            }
+
+            if (lowestNumOfLb > ladyBirds.Count)
+            {
+                lowestNumOfLb = ladyBirds.Count;
+            }
+
+            if (timeStep > 0) 
             {
                 avergaeNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep);
                 avergaeNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep);
             }
+            else
+            {
+                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf);
+                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb);
+            }
         }
 
-        public void WriteToSameFile()
+        public void WriteToFile(bool createNewFile) 
         {
-            string fileName = "Information.txt";
-            string currentDir = Directory.GetCurrentDirectory();
-            string pathString = Path.Combine(currentDir, fileName);
+            //This method write information about the world in a text file.
 
-            StreamWriter file = File.AppendText(pathString);
+            string fileName, currentDir, pathString;
+            if (createNewFile == true || filePath == null) 
+            {
+                int fileNumber = 0;
+                // We keep genrating file names until one of them doen't already exist in the current directory.
+                do
+                {
+                    fileName = $"Information{fileNumber++}.txt";
+                    currentDir = Directory.GetCurrentDirectory();
+                    pathString = Path.Combine(currentDir, fileName);
+
+                } while (File.Exists(pathString));
+                filePath = pathString;
+            }
+
+            StreamWriter file = File.AppendText(filePath);
             file.WriteLine("General Information About World {0}.\n", id);
             file.WriteLine("Number of Steps: " + timeStep);
+            file.WriteLine("Grid Size: {0}x{1}", length, width);
             file.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
-            file.WriteLine("Start Number for Lqdybirds: {0}", startLadybirdNums);
+            file.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
             file.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
             file.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
-            file.WriteLine("Average number of greenflies per turn: " + avergaeNumOfGf);
-            file.WriteLine("Average number of ladybirds per turn: " + avergaeNumOfLb);
+            file.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
+            file.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
+            file.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
+            file.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
             file.WriteLine("\n");
             file.Close();
-
-
-            //file.WriteLine(currentDir + "    " + pathString);
         }
 
     }

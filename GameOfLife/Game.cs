@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.
 
 namespace GameOfLife
 {
@@ -11,6 +10,7 @@ namespace GameOfLife
         private byte startOption;
         private uint rows, cols, gfs, lbs, numsOfCells, numsOfCreatures;
         private uint simulationSpeed, mode;
+        private bool createNewFile = true;
 
         public uint SimulationSpeed
         {
@@ -52,6 +52,7 @@ namespace GameOfLife
             Console.WriteLine("-----------------------------------------------------------------------------------------------------");
 
             bool startOptionIsValid;
+            // This loop make sure that start option is either 0 or 1.
             do
             {
                 startOptionIsValid = true;
@@ -137,10 +138,6 @@ namespace GameOfLife
         {
             bool redraw = true;
             bool newStart = false;
-            DateTime now = DateTime.Now;
-            string fileName = $"Information{now.ToString()}.txt";
-            string currentDir = Directory.GetCurrentDirectory();
-            string pathString = Path.Combine(currentDir, fileName);
             do
             {
                 ConsoleKeyInfo k = Console.ReadKey();
@@ -182,14 +179,15 @@ namespace GameOfLife
                 else if (k.Key == ConsoleKey.Escape)
                 {
                     redraw = false;
-                    //world.WriteToNewFile(pathString); //!!!!!!!!!!!!!!!!!!!!
+                    world.WriteToFile(createNewFile);
                     Console.WriteLine("\n You Exited the Game.");
                 }
 
                 else if (k.Key == ConsoleKey.N)
                 {
                     redraw = false;
-                    //world.WriteToSameFile(pathString); //!!!!!!!!!!!!!!!!!!!!
+                    createNewFile = false;
+                    world.WriteToFile(false);
                     newStart = true;
                     
                 }
