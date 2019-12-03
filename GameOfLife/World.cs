@@ -14,7 +14,8 @@ namespace GameOfLife
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladyBirds = new List<LadyBird>();
-        private static string filePath;
+        private static string[] filePath;
+        private Dictionary<int, int[]> graphValues = new Dictionary<int, int[]>(); 
 
         // This attribute will be the general information about the world.
         private int totalNumOfGf = 0, totalNumOfLb = 0;
@@ -70,11 +71,13 @@ namespace GameOfLife
             {
                 ChangeLadybirds();
                 ChangeGreenflies();
+                graphValues.Add(timeStep, new int[] { greenflies.Count, ladyBirds.Count });
             }
 
             else //[1]
             {
                 timeStep = 0;
+                graphValues.Add(timeStep, new int[] { startGreenflyNums, startLadybirdNums });
                 cells = new Cell[length, width];
                 for (int i = 0; i < cells.GetLength(0); i++)
                 {
@@ -246,39 +249,61 @@ namespace GameOfLife
             }
         }
 
-        public void WriteToFile(bool createNewFile) 
+        public void WriteToFile(bool createNewFile)
         {
             //This method write information about the world in a text file.
 
-            string fileName, currentDir, pathString;
-            if (createNewFile == true || filePath == null) 
+            string infoFileName, tableFileName, currentDir, pathString1, pathString2;
+            int fileNumber = 0;
+            if (createNewFile == true || filePath == null)
             {
-                int fileNumber = 0;
                 // We keep genrating file names until one of them doen't already exist in the current directory.
                 do
                 {
-                    fileName = $"Information{fileNumber++}.txt";
+                    fileNumber++;
+                    infoFileName = $"Information{fileNumber}.txt";
+                    tableFileName = $"Table{fileNumber}.txt";
                     currentDir = Directory.GetCurrentDirectory();
-                    pathString = Path.Combine(currentDir, fileName);
+                    pathString1 = Path.Combine(currentDir, infoFileName);
+                    pathString2 = Path.Combine(currentDir, tableFileName);
 
-                } while (File.Exists(pathString));
-                filePath = pathString;
+                } while (File.Exists(pathString1) || File.Exists(pathString2));
+                filePath = new string[2]{ pathString1, pathString2 };
             }
 
-            StreamWriter file = File.AppendText(filePath);
-            file.WriteLine("General Information About World {0}.\n", id);
-            file.WriteLine("Number of Steps: " + timeStep);
-            file.WriteLine("Grid Size: {0}x{1}", length, width);
-            file.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
-            file.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
-            file.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
-            file.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
-            file.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
-            file.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
-            file.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
-            file.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
-            file.WriteLine("\n");
-            file.Close();
+            // Inforamtion File.
+            StreamWriter infoFile = File.AppendText(filePath[0]);
+            infoFile.WriteLine("General Information About World {0}.\n", id);
+            infoFile.WriteLine("Number of Steps: " + timeStep);
+            infoFile.WriteLine("Grid Size: {0}x{1}", length, width);
+            infoFile.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
+            infoFile.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
+            infoFile.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
+            infoFile.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
+            infoFile.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
+            infoFile.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
+            infoFile.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
+            infoFile.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
+            infoFile.WriteLine("\n");
+            infoFile.Close();
+
+            // Table File.
+            StreamWriter tableFile = File.AppendText(filePath[1]);
+            tableFile.WriteLine("Table for World {0}.\n", id);
+            tableFile.WriteLine(new string('-', 30));
+            tableFile.WriteLine("TimeStep  |Greenfly  |Ladybird");
+            tableFile.WriteLine(new string('-', 30));
+            
+            foreach (KeyValuePair<int, int[]> item in graphValues)
+            {
+                tableFile.WriteLine(item.Key.ToString().PadRight(10) + "|" + item.Value[0].ToString().PadRight(10)
+                                + "|" + item.Value[1].ToString().PadRight(10));
+            }
+
+            tableFile.WriteLine(new string('-', 30));
+            tableFile.WriteLine("\n");
+            tableFile.Close();
+            
         }
 
     }
