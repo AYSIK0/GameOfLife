@@ -249,13 +249,13 @@ namespace GameOfLife
             }
         }
 
-        public void WriteToFile(bool createNewFile)
+        public void WriteToFile()
         {
             //This method write information about the world in a text file.
 
-            string infoFileName, tableFileName, currentDir, infoPathString, tablePathString;
+            string infoFileName, tableFileName, currentDir, pathString1, tablePathString;
             int fileNumber = 0;
-            if (createNewFile == true || filePaths == null)
+            if (filePaths == null)
             {
                 // We keep genrating file names until one of them doen't already exist in the current directory.
                 do
@@ -264,11 +264,11 @@ namespace GameOfLife
                     infoFileName = $"Information{fileNumber}.txt";
                     tableFileName = $"Table{fileNumber}.txt";
                     currentDir = Directory.GetCurrentDirectory();
-                    infoPathString = Path.Combine(currentDir, infoFileName);
+                    pathString1 = Path.Combine(currentDir, infoFileName);
                     tablePathString = Path.Combine(currentDir, tableFileName);
 
-                } while (File.Exists(infoPathString) || File.Exists(tablePathString));
-                filePaths = new string[2]{ infoPathString, tablePathString };
+                } while (File.Exists(pathString1) || File.Exists(tablePathString));
+                filePaths = new string[2]{ pathString1, tablePathString };
             }
 
             // Inforamtion File.

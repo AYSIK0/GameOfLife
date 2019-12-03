@@ -10,7 +10,6 @@ namespace GameOfLife
         private byte startOption;
         private uint rows, cols, gfs, lbs, numsOfCells, numsOfCreatures;
         private uint simulationSpeed, mode;
-        private bool createNewFile = true;
 
         public uint SimulationSpeed
         {
@@ -180,15 +179,14 @@ namespace GameOfLife
                 else if (k.Key == ConsoleKey.Escape)
                 {
                     redraw = false;
-                    world.WriteToFile(createNewFile);
+                    world.WriteToFile();
                     Console.WriteLine("\n You Exited the Game.");
                 }
 
                 else if (k.Key == ConsoleKey.N)
                 {
                     redraw = false;
-                    createNewFile = false;
-                    world.WriteToFile(false);
+                    world.WriteToFile();
                     newStart = true;
                     
                 }
