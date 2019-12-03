@@ -49,6 +49,8 @@ When you start you will be asked to choose between 2 start options:
 
 * To exit the game press Escape key (esc).
 
-* When you finish a game a file named "Information.txt" will be generated, it contains some inforamtion about the simulation.
+* When you finish a game a Two files will be created:
+1. Information.txt: It contains some inforamtion about the simulation.
+2. Table.txt      : A table will be created that has the number of Greenflies and Ladybirds for each turn.      
 
-*N.B Only one information file is created for each game. when you start a new world the information about the previous and current world will be in the same file. (each world has it's own ID)*
+*N.B Only one pair of files (information, table) is created for each game. when you start a new world the information about the previous and current world will be in the same file. (each world has it's own ID)*
