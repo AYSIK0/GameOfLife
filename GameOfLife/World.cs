@@ -13,8 +13,8 @@ namespace GameOfLife
         public int timeStep;
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
-        private List<LadyBird> ladyBirds = new List<LadyBird>();
-        private static string[] filePath;
+        private List<LadyBird> ladybirds = new List<LadyBird>();
+        private static string[] filePaths;
         private Dictionary<int, int[]> graphValues = new Dictionary<int, int[]>(); 
 
         // This attribute will be the general information about the world.
@@ -26,7 +26,7 @@ namespace GameOfLife
         public World(int L, int W, int GFs, int LBs)
         {
             this.id = nextId++;
-            filePath = filePath;
+            filePaths = filePaths;
             length = L;
             width = W;
             startGreenflyNums = GFs;
@@ -71,7 +71,7 @@ namespace GameOfLife
             {
                 ChangeLadybirds();
                 ChangeGreenflies();
-                graphValues.Add(timeStep, new int[] { greenflies.Count, ladyBirds.Count });
+                graphValues.Add(timeStep, new int[] { greenflies.Count, ladybirds.Count });
             }
 
             else //[1]
@@ -98,7 +98,7 @@ namespace GameOfLife
                     if (CellIsEmpty(randX, randY)) 
                     {
                         LadyBird ladyBird = new LadyBird(randX, randY);
-                        ladyBirds.Add(ladyBird);
+                        ladybirds.Add(ladyBird);
                         cells[randX, randY].content = ladyBird.shape;
                     }
                     else
@@ -109,7 +109,7 @@ namespace GameOfLife
                             randY = rand.Next(0, width);
                         }
                         LadyBird ladyBird = new LadyBird(randX, randY);
-                        ladyBirds.Add(ladyBird);
+                        ladybirds.Add(ladyBird);
                         cells[randX, randY].content = ladyBird.shape;
                     }
                 }
@@ -164,15 +164,15 @@ namespace GameOfLife
 
         private void ChangeLadybirds() // This method Move and Breed Ladybirds.
         {
-            for (int L = ladyBirds.Count - 1; L >= 0; L--)
+            for (int L = ladybirds.Count - 1; L >= 0; L--)
             {
-                LadyBird currentLb = ladyBirds[L];
+                LadyBird currentLb = ladybirds[L];
                 currentLb.lifeTime++;
 
                 if (currentLb.notEating == 3) // Checking if the ladybird has starved.
                 {
                     cells[currentLb.row, currentLb.column].content = ' '; // I can also change the state to 3(Empty)
-                    ladyBirds.Remove(currentLb);
+                    ladybirds.Remove(currentLb);
                     continue;
                 }
 
@@ -187,7 +187,7 @@ namespace GameOfLife
                 // BREED Part For LadyBirds.
                 if (currentLb.lifeTime != 0 && currentLb.lifeTime % 8 == 0)
                 {
-                    currentLb.Breed(cells, ladyBirds);
+                    currentLb.Breed(cells, ladybirds);
                 }
 
             }
@@ -208,18 +208,18 @@ namespace GameOfLife
         public int[] GetTheCounts() // Return the current number of Greenflies and Ladybirds in the grid.
         {
             int G = greenflies.Count;
-            int L = ladyBirds.Count;
+            int L = ladybirds.Count;
             return new int[2] { G, L };
         }
 
         public void Information() // This method update the Information.
         {
             totalNumOfGf += greenflies.Count;
-            totalNumOfLb += ladyBirds.Count;
+            totalNumOfLb += ladybirds.Count;
 
-            if (highestNumOfLb < ladyBirds.Count)
+            if (highestNumOfLb < ladybirds.Count)
             {
-                highestNumOfLb = ladyBirds.Count;
+                highestNumOfLb = ladybirds.Count;
             }
 
             if (highestNumOfGf < greenflies.Count)
@@ -232,9 +232,9 @@ namespace GameOfLife
                 lowestNumOfGf = greenflies.Count;
             }
 
-            if (lowestNumOfLb > ladyBirds.Count)
+            if (lowestNumOfLb > ladybirds.Count)
             {
-                lowestNumOfLb = ladyBirds.Count;
+                lowestNumOfLb = ladybirds.Count;
             }
 
             if (timeStep > 0) 
@@ -253,9 +253,9 @@ namespace GameOfLife
         {
             //This method write information about the world in a text file.
 
-            string infoFileName, tableFileName, currentDir, pathString1, pathString2;
+            string infoFileName, tableFileName, currentDir, infoPathString, tablePathString;
             int fileNumber = 0;
-            if (createNewFile == true || filePath == null)
+            if (createNewFile == true || filePaths == null)
             {
                 // We keep genrating file names until one of them doen't already exist in the current directory.
                 do
@@ -264,15 +264,15 @@ namespace GameOfLife
                     infoFileName = $"Information{fileNumber}.txt";
                     tableFileName = $"Table{fileNumber}.txt";
                     currentDir = Directory.GetCurrentDirectory();
-                    pathString1 = Path.Combine(currentDir, infoFileName);
-                    pathString2 = Path.Combine(currentDir, tableFileName);
+                    infoPathString = Path.Combine(currentDir, infoFileName);
+                    tablePathString = Path.Combine(currentDir, tableFileName);
 
-                } while (File.Exists(pathString1) || File.Exists(pathString2));
-                filePath = new string[2]{ pathString1, pathString2 };
+                } while (File.Exists(infoPathString) || File.Exists(tablePathString));
+                filePaths = new string[2]{ infoPathString, tablePathString };
             }
 
             // Inforamtion File.
-            StreamWriter infoFile = File.AppendText(filePath[0]);
+            StreamWriter infoFile = File.AppendText(filePaths[0]);
             infoFile.WriteLine("General Information About World {0}.\n", id);
             infoFile.WriteLine("Number of Steps: " + timeStep);
             infoFile.WriteLine("Grid Size: {0}x{1}", length, width);
@@ -288,7 +288,7 @@ namespace GameOfLife
             infoFile.Close();
 
             // Table File.
-            StreamWriter tableFile = File.AppendText(filePath[1]);
+            StreamWriter tableFile = File.AppendText(filePaths[1]);
             tableFile.WriteLine("Table for World {0}.\n", id);
             tableFile.WriteLine(new string('-', 30));
             tableFile.WriteLine("TimeStep  |Greenfly  |Ladybird");
@@ -303,8 +303,6 @@ namespace GameOfLife
             tableFile.WriteLine(new string('-', 30));
             tableFile.WriteLine("\n");
             tableFile.Close();
-            
         }
-
     }
 }

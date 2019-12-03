@@ -49,6 +49,7 @@ namespace GameOfLife
             Console.WriteLine("5.Simulation Speed must be bigger than 0.");
             Console.WriteLine("6.There are only Two Display Modes 0 (Grid is drawn every time) and 1 (Only the final grid is drawn).");
             Console.WriteLine("7.You can choose between 2 start options 0: Default and 1: Custom");
+            Console.WriteLine("8.Each time you exist the game two files (Information.txt and Table.txt) will be created.");
             Console.WriteLine("-----------------------------------------------------------------------------------------------------");
 
             bool startOptionIsValid;
