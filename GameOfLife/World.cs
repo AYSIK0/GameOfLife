@@ -253,7 +253,7 @@ namespace GameOfLife
         {
             //This method write information about the world in a text file.
 
-            string infoFileName, tableFileName, currentDir, pathString1, tablePathString;
+            string infoFileName, tableFileName, currentDir, infoPathString, tablePathString;
             int fileNumber = 0;
             if (filePaths == null)
             {
@@ -264,11 +264,11 @@ namespace GameOfLife
                     infoFileName = $"Information{fileNumber}.txt";
                     tableFileName = $"Table{fileNumber}.txt";
                     currentDir = Directory.GetCurrentDirectory();
-                    pathString1 = Path.Combine(currentDir, infoFileName);
+                    infoPathString = Path.Combine(currentDir, infoFileName);
                     tablePathString = Path.Combine(currentDir, tableFileName);
 
-                } while (File.Exists(pathString1) || File.Exists(tablePathString));
-                filePaths = new string[2]{ pathString1, tablePathString };
+                } while (File.Exists(infoPathString) || File.Exists(tablePathString));
+                filePaths = new string[2]{ infoPathString, tablePathString };
             }
 
             // Inforamtion File.
