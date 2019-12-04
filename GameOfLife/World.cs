@@ -254,7 +254,7 @@ namespace GameOfLife
         {
             //This method write information about the world in a text file.
 
-            string infoFileName, currentDir, infoPathString, tablePathString;
+            string infoFileName, currentDir, infoPathString;
             if (filePaths == null)
             {
                 // We keep genrating file names until one of them doen't already exist in the current directory.
@@ -285,19 +285,17 @@ namespace GameOfLife
             infoFile.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
             infoFile.WriteLine("\n");
             infoFile.Close();
-
-            
-            
         }
 
         public void WriteTableFile()
         {
+            // This method will craete an csv file for each world.
+
             string tableFileName, currentDir, tablePathString;
 
             tableFileName = $"Table{fileNumber}w{id}.csv";
             currentDir = Directory.GetCurrentDirectory();
             tablePathString = Path.Combine(currentDir, tableFileName);
-
             filePaths[1] = tablePathString;
 
             // Table File.
