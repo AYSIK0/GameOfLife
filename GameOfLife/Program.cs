@@ -1,5 +1,4 @@
 ﻿//Ayoub Sikouky.
-//Rev.Date: 30/11/2019.
 
 using System;
 

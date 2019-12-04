@@ -271,20 +271,21 @@ namespace GameOfLife
             }
 
             // Inforamtion File.
-            StreamWriter infoFile = File.AppendText(filePaths[0]);
-            infoFile.WriteLine("General Information About World {0}.\n", id);
-            infoFile.WriteLine("Number of Steps: " + timeStep);
-            infoFile.WriteLine("Grid Size: {0}x{1}", length, width);
-            infoFile.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
-            infoFile.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
-            infoFile.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
-            infoFile.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
-            infoFile.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
-            infoFile.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
-            infoFile.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
-            infoFile.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
-            infoFile.WriteLine("\n");
-            infoFile.Close();
+            using (StreamWriter infoFile = File.AppendText(filePaths[0]))
+            {
+                infoFile.WriteLine("General Information About World {0}.\n", id);
+                infoFile.WriteLine("Number of Steps: " + timeStep);
+                infoFile.WriteLine("Grid Size: {0}x{1}", length, width);
+                infoFile.WriteLine("Start Number for Greenflies: {0}", startGreenflyNums);
+                infoFile.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
+                infoFile.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
+                infoFile.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
+                infoFile.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
+                infoFile.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
+                infoFile.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
+                infoFile.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
+                infoFile.WriteLine("\n");
+            }
         }
 
         public void WriteTableFile()
@@ -299,14 +300,15 @@ namespace GameOfLife
             filePaths[1] = tablePathString;
 
             // Table File.
-            StreamWriter tableFile = File.AppendText(filePaths[1]);
-            tableFile.WriteLine("TimeStep,Greenfly,Ladybird");
-
-            foreach (KeyValuePair<int, int[]> item in graphValues)
+            using (StreamWriter tableFile = File.AppendText(filePaths[1]))
             {
-                tableFile.WriteLine(item.Key.ToString() + "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
+                tableFile.WriteLine("TimeStep,Greenfly,Ladybird");
+
+                foreach (KeyValuePair<int, int[]> item in graphValues)
+                {
+                    tableFile.WriteLine(item.Key.ToString() + "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
+                }
             }
-            tableFile.Close();
         }
     }
 }
