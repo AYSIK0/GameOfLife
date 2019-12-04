@@ -262,7 +262,7 @@ namespace GameOfLife
                 {
                     fileNumber++;
                     infoFileName = $"Information{fileNumber}.txt";
-                    tableFileName = $"Table{fileNumber}.txt";
+                    tableFileName = $"Table{fileNumber}.csv";
                     currentDir = Directory.GetCurrentDirectory();
                     infoPathString = Path.Combine(currentDir, infoFileName);
                     tablePathString = Path.Combine(currentDir, tableFileName);
@@ -289,18 +289,13 @@ namespace GameOfLife
 
             // Table File.
             StreamWriter tableFile = File.AppendText(filePaths[1]);
-            tableFile.WriteLine("Table for World {0}.\n", id);
-            tableFile.WriteLine(new string('-', 30));
-            tableFile.WriteLine("TimeStep  |Greenfly  |Ladybird");
-            tableFile.WriteLine(new string('-', 30));
+            tableFile.WriteLine("TimeStep,Greenfly,Ladybird");
             
             foreach (KeyValuePair<int, int[]> item in graphValues)
             {
-                tableFile.WriteLine(item.Key.ToString().PadRight(10) + "|" + item.Value[0].ToString().PadRight(10)
-                                + "|" + item.Value[1].ToString().PadRight(10));
+                tableFile.WriteLine(item.Key.ToString()+ "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
             }
 
-            tableFile.WriteLine(new string('-', 30));
             tableFile.WriteLine("\n");
             tableFile.Close();
         }
