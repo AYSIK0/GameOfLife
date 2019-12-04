@@ -306,8 +306,6 @@ namespace GameOfLife
             {
                 tableFile.WriteLine(item.Key.ToString() + "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
             }
-
-            tableFile.WriteLine("\n");
             tableFile.Close();
         }
     }
