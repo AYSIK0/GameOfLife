@@ -15,7 +15,8 @@ namespace GameOfLife
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladybirds = new List<LadyBird>();
         private static string[] filePaths;
-        private Dictionary<int, int[]> graphValues = new Dictionary<int, int[]>(); 
+        private Dictionary<int, int[]> graphValues = new Dictionary<int, int[]>();
+        private static int fileNumber = 0;
 
         // This attribute will be the general information about the world.
         private int totalNumOfGf = 0, totalNumOfLb = 0;
@@ -253,8 +254,7 @@ namespace GameOfLife
         {
             //This method write information about the world in a text file.
 
-            string infoFileName, tableFileName, currentDir, infoPathString, tablePathString;
-            int fileNumber = 0;
+            string infoFileName, currentDir, infoPathString, tablePathString;
             if (filePaths == null)
             {
                 // We keep genrating file names until one of them doen't already exist in the current directory.
@@ -262,13 +262,12 @@ namespace GameOfLife
                 {
                     fileNumber++;
                     infoFileName = $"Information{fileNumber}.txt";
-                    tableFileName = $"Table{fileNumber}.csv";
                     currentDir = Directory.GetCurrentDirectory();
                     infoPathString = Path.Combine(currentDir, infoFileName);
-                    tablePathString = Path.Combine(currentDir, tableFileName);
 
-                } while (File.Exists(infoPathString) || File.Exists(tablePathString));
-                filePaths = new string[2]{ infoPathString, tablePathString };
+                } while (File.Exists(infoPathString));
+                filePaths = new string[2];
+                filePaths[0] =  infoPathString;
             }
 
             // Inforamtion File.
@@ -287,13 +286,27 @@ namespace GameOfLife
             infoFile.WriteLine("\n");
             infoFile.Close();
 
+            
+            
+        }
+
+        public void WriteTableFile()
+        {
+            string tableFileName, currentDir, tablePathString;
+
+            tableFileName = $"Table{fileNumber}w{id}.csv";
+            currentDir = Directory.GetCurrentDirectory();
+            tablePathString = Path.Combine(currentDir, tableFileName);
+
+            filePaths[1] = tablePathString;
+
             // Table File.
             StreamWriter tableFile = File.AppendText(filePaths[1]);
             tableFile.WriteLine("TimeStep,Greenfly,Ladybird");
-            
+
             foreach (KeyValuePair<int, int[]> item in graphValues)
             {
-                tableFile.WriteLine(item.Key.ToString()+ "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
+                tableFile.WriteLine(item.Key.ToString() + "," + item.Value[0].ToString() + "," + item.Value[1].ToString());
             }
 
             tableFile.WriteLine("\n");

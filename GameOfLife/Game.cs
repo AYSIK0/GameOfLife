@@ -180,6 +180,7 @@ namespace GameOfLife
                 {
                     redraw = false;
                     world.WriteToFile();
+                    world.WriteTableFile();
                     Console.WriteLine("\n You Exited the Game.");
                 }
 
@@ -187,6 +188,7 @@ namespace GameOfLife
                 {
                     redraw = false;
                     world.WriteToFile();
+                    world.WriteTableFile();
                     newStart = true;
                     
                 }
