@@ -49,8 +49,16 @@ When you start you will be asked to choose between 2 start options:
 
 * To exit the game press Escape key (esc).
 
+* If the number of a creature has reachead 0 the game will stop and you will be asked to either exist the game or create a new world.
+
 * When you finish a game a Two files will be created:
 1. Information.txt: It contains some inforamtion about the simulation.
-2. Table.txt      : A table will be created that has the number of Greenflies and Ladybirds for each turn.      
+2. Table.csv      : it will contain the number of Greenflies and Ladybirds for each turn.      
 
-*N.B Only one pair of files (information, table) is created for each game. when you start a new world the information about the previous and current world will be in the same file. (each world has it's own ID)*
+*N.B Only one information file is created for each game. when you start a new world the information about the previous and current world will be in the same file. As for the table file ecah world will have it's own table file (each world has it's own ID)*
+
+Example:
+Let's say you did two simulation in one game, the following files will be generated:
+1. Information1.txt
+2. Table1w1.csv {the second 1 is the id}
+3. Table1w2.csv {2 is the id}
