@@ -138,11 +138,12 @@ namespace GameOfLife
         {
             bool redraw = true;
             bool newStart = false;
-            do
-            {
-                ConsoleKeyInfo k = Console.ReadKey();
 
-                if (k.Key == ConsoleKey.S) // When the user press 's' they will be able to change the simulation speed and Display mode.
+            while (redraw)
+            {
+                ConsoleKeyInfo mainKey = Console.ReadKey();
+
+                if (mainKey.Key == ConsoleKey.S) // When the user press 's' they will be able to change the simulation speed and Display mode.
                 {
                     try
                     {
@@ -171,20 +172,37 @@ namespace GameOfLife
 
                 }
 
-                else if (k.Key == ConsoleKey.Enter)
+                else if (mainKey.Key == ConsoleKey.Enter) // Continue with the simulation.
                 {
-                    Simulate();
+                    if (!world.continu) // Checking if the number of greenfly or ladybird has reached 0. 
+                    {
+                        bool keyvalid = false;
+
+                        while (!keyvalid)
+                        {
+                            Console.WriteLine("\nThe Number of greenflies or ladybirds have reached 0.");
+                            Console.Write("Press Escape to exit the game or 'n' to start a new world: ");
+
+                            mainKey = Console.ReadKey();
+
+                            if (mainKey.Key == ConsoleKey.Escape || mainKey.Key == ConsoleKey.N)
+                            {
+                                keyvalid = true;
+                            }
+                        }
+                    }
+                    else
+                        Simulate();
                 }
 
-                else if (k.Key == ConsoleKey.Escape)
+                if (mainKey.Key == ConsoleKey.Escape) // Finish the simulation and write to files.
                 {
                     redraw = false;
                     world.WriteToFile();
                     world.WriteTableFile();
-                    Console.WriteLine("\n You Exited the Game.");
                 }
 
-                else if (k.Key == ConsoleKey.N)
+                if (mainKey.Key == ConsoleKey.N) // Create a new world and write the information of the previous world.
                 {
                     redraw = false;
                     world.WriteToFile();
@@ -192,14 +210,16 @@ namespace GameOfLife
                     newStart = true;
                     
                 }
-
-            } while (redraw);
+            }
 
             if (newStart == true)
             {
+                Console.WriteLine("\nThe start of a new world!!\n");
                 Start();
                 Continue();
             }
+
+            Console.WriteLine("\nYou Exited the Game.");
         }
 
         private void Simulate()
@@ -218,8 +238,13 @@ namespace GameOfLife
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {
-                    world.timeStep++;
-                    world.Generate();
+                    if (world.continu)
+                    {
+                        world.timeStep++;
+                        world.Generate();
+                    }
+                    else
+                        break;
                 }
                 ConsoleDraw();
             }

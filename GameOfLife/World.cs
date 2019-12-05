@@ -11,12 +11,15 @@ namespace GameOfLife
         private int width, length;
         public Cell[,] cells;
         public int timeStep;
+        public bool continu = true;
         private int startGreenflyNums, startLadybirdNums;
         private List<GreenFly> greenflies = new List<GreenFly>();
         private List<LadyBird> ladybirds = new List<LadyBird>();
+
         private static string[] filePaths;
         private Dictionary<int, int[]> graphValues = new Dictionary<int, int[]>();
         private static int fileNumber = 0;
+        
 
         // This attribute will be the general information about the world.
         private int totalNumOfGf = 0, totalNumOfLb = 0;
@@ -73,6 +76,8 @@ namespace GameOfLife
                 ChangeLadybirds();
                 ChangeGreenflies();
                 graphValues.Add(timeStep, new int[] { greenflies.Count, ladybirds.Count });
+
+                continu &= (ladybirds.Count != 0 && greenflies.Count != 0);
             }
 
             else //[1]
@@ -194,7 +199,7 @@ namespace GameOfLife
             }
         }
 
-        public bool CellIsEmpty(int x, int y)
+        private bool CellIsEmpty(int x, int y)
         {
             if (cells[x, y] == null || cells[x, y].content == ' ')
             {
