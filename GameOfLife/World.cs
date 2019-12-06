@@ -25,11 +25,11 @@ namespace GameOfLife
         private int totalNumOfGf = 0, totalNumOfLb = 0;
         private int highestNumOfGf = 0, highestNumOfLb = 0;
         private int lowestNumOfGf, lowestNumOfLb;
-        private float avergaeNumOfGf = 0, avergaeNumOfLb =  0;
+        private float avergaeNumOfGf = 0f, avergaeNumOfLb = 0f;
 
         public World(int L, int W, int GFs, int LBs)
         {
-            this.id = nextId++;
+            id = nextId++;
             filePaths = filePaths;
             length = L;
             width = W;
@@ -77,14 +77,16 @@ namespace GameOfLife
                 ChangeGreenflies();
                 graphValues.Add(timeStep, new int[] { greenflies.Count, ladybirds.Count });
 
-                continu &= (ladybirds.Count != 0 && greenflies.Count != 0);
+                continu &= (ladybirds.Count != 0 && greenflies.Count != 0); // Checking if the number of greenflies or ladybirds has reachead 0
             }
 
             else //[1]
             {
                 timeStep = 0;
+
                 graphValues.Add(timeStep, new int[] { startGreenflyNums, startLadybirdNums });
                 cells = new Cell[length, width];
+
                 for (int i = 0; i < cells.GetLength(0); i++)
                 {
                     for (int j = 0; j < cells.GetLength(1); j++)
@@ -146,12 +148,14 @@ namespace GameOfLife
                 }
             }
 
-            Information();
+            Information(); // Update the information.
         }
 
         private void ChangeGreenflies() // This method Move and Breed GreenFlies.
         {
+            // Storing the current number of greenflies so we don't loop over new greenflies until next turn.
             int gfNums = greenflies.Count;
+
             for (int G = 0; G < gfNums; G++)
             {
                 GreenFly currentGf = greenflies[G];
@@ -170,6 +174,10 @@ namespace GameOfLife
 
         private void ChangeLadybirds() // This method Move and Breed Ladybirds.
         {
+            // We iterate starting at the end of the list for two reasons:
+            // 1.If a ladybird is removed we don't want to try an access an element that doesn't exist.
+            // 2.When new ladybirds are added we won't loop over them until next turn.
+
             for (int L = ladybirds.Count - 1; L >= 0; L--)
             {
                 LadyBird currentLb = ladybirds[L];
@@ -177,7 +185,7 @@ namespace GameOfLife
 
                 if (currentLb.notEating == 3) // Checking if the ladybird has starved.
                 {
-                    cells[currentLb.row, currentLb.column].content = ' '; // I can also change the state to 3(Empty)
+                    cells[currentLb.row, currentLb.column].content = ' ';
                     ladybirds.Remove(currentLb);
                     continue;
                 }
@@ -218,44 +226,44 @@ namespace GameOfLife
             return new int[2] { G, L };
         }
 
-        public void Information() // This method update the Information.
+        private void Information() // This method update the Information.
         {
             totalNumOfGf += greenflies.Count;
             totalNumOfLb += ladybirds.Count;
 
-            if (highestNumOfLb < ladybirds.Count)
+            if (highestNumOfLb < ladybirds.Count) // Highest Number of Ladybirds.
             {
                 highestNumOfLb = ladybirds.Count;
             }
 
-            if (highestNumOfGf < greenflies.Count)
+            if (highestNumOfGf < greenflies.Count) // Highest Number of Greenflies.
             {
                 highestNumOfGf = greenflies.Count;
             }
 
-            if (lowestNumOfGf > greenflies.Count)
+            if (lowestNumOfGf > greenflies.Count) // Lowest Number of Ladybirds.
             {
                 lowestNumOfGf = greenflies.Count;
             }
 
-            if (lowestNumOfLb > ladybirds.Count)
+            if (lowestNumOfLb > ladybirds.Count) // Highest Number of Ladybirds.
             {
                 lowestNumOfLb = ladybirds.Count;
             }
 
             if (timeStep > 0) 
             {
-                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep);
-                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep);
+                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep); // Average Number of Greenflies per turn.
+                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep); // Average Number of Ladybirds per turn.
             }
-            else
+            else // When Time Step = 0
             {
                 avergaeNumOfGf = Convert.ToSingle(totalNumOfGf);
                 avergaeNumOfLb = Convert.ToSingle(totalNumOfLb);
             }
         }
 
-        public void WriteToFile()
+        public void WriteInfoFile()
         {
             //This method write information about the world in a text file.
 
@@ -295,7 +303,7 @@ namespace GameOfLife
 
         public void WriteTableFile()
         {
-            // This method will craete an csv file for each world.
+            // This method will create a csv file for each world.
 
             string tableFileName, currentDir, tablePathString;
 

@@ -9,7 +9,7 @@ namespace GameOfLife
 
         private byte startOption;
         private uint rows, cols, gfs, lbs, numsOfCells, numsOfCreatures;
-        private uint simulationSpeed, mode;
+        private uint simulationSpeed = 1, mode = 0;
 
         public uint SimulationSpeed
         {
@@ -44,12 +44,12 @@ namespace GameOfLife
             Console.WriteLine("1.The world which is a grid of cells, each cell can either contain a Ladybird, Greenfly or be empty.");
             Console.WriteLine("2.Ladybirds 'x' ,can eat greenflies or move each turn, if it didn't eat any greenflies in the last 3 turns it dies. it can breed after 8 turns.");
             Console.WriteLine("3.Greenflies 'o', can only moves and breed after 3 turns.");
-            Console.WriteLine("4.Make sure that the total number of cell is equal or bigger than the number of greenflies and ladybirds combined!!");
+            Console.WriteLine("4.Make sure that the total number of cell is equal or larger than the number of greenflies and ladybirds combined!!");
             Console.WriteLine("5.Simulation Speed must be bigger than 0.");
             Console.WriteLine("6.There are only Two Display Modes 0 (Grid is drawn every time) and 1 (Only the final grid is drawn).");
             Console.WriteLine("7.You can choose between 2 start options 0: Default and 1: Custom");
-            Console.WriteLine("8.Each time you exist the game two files (Information.txt and Table.txt) will be created.");
-            Console.WriteLine("-----------------------------------------------------------------------------------------------------");
+            Console.WriteLine("8.Each time you start a new Game the following files (one Information.txt) and (one Table.csv foreach world) will be created.");
+            Console.WriteLine(new string('-', 125));
 
             bool startOptionIsValid;
             // This loop make sure that start option is either 0 or 1.
@@ -104,10 +104,10 @@ namespace GameOfLife
                         lbs = Convert.ToUInt32(Console.ReadLine());
 
                         Console.Write("Enter simulation speed: ");
-                        simulationSpeed = Convert.ToUInt32(Console.ReadLine());
-
+                        SimulationSpeed = Convert.ToUInt32(Console.ReadLine());
+                        
                         Console.Write("Choose Display mode(0 or 1): ");
-                        mode = Convert.ToUInt32(Console.ReadLine());
+                        Mode = Convert.ToUInt32(Console.ReadLine());
 
                         inputsCorrect = true;
                     }
@@ -138,10 +138,11 @@ namespace GameOfLife
         {
             bool redraw = true;
             bool newStart = false;
+            ConsoleKeyInfo mainKey;
 
             while (redraw)
             {
-                ConsoleKeyInfo mainKey = Console.ReadKey();
+                mainKey = Console.ReadKey();
 
                 if (mainKey.Key == ConsoleKey.S) // When the user press 's' they will be able to change the simulation speed and Display mode.
                 {
@@ -195,26 +196,25 @@ namespace GameOfLife
                         Simulate();
                 }
 
-                if (mainKey.Key == ConsoleKey.Escape) // Finish the simulation and write to files.
+                if (mainKey.Key == ConsoleKey.Escape) // Finish the simulation and write the files.
                 {
                     redraw = false;
-                    world.WriteToFile();
+                    world.WriteInfoFile();
                     world.WriteTableFile();
                 }
 
                 if (mainKey.Key == ConsoleKey.N) // Create a new world and write the information of the previous world.
                 {
                     redraw = false;
-                    world.WriteToFile();
+                    world.WriteInfoFile();
                     world.WriteTableFile();
                     newStart = true;
-                    
                 }
             }
 
             if (newStart == true)
             {
-                Console.WriteLine("\nThe start of a new world!!\n");
+                Console.WriteLine("\n\nStarting a new world!!\n");
                 Start();
                 Continue();
             }
@@ -228,9 +228,15 @@ namespace GameOfLife
             {
                 for (int i = 0; i < SimulationSpeed; i++)
                 {
-                    world.timeStep++;
-                    world.Generate();
-                    ConsoleDraw();
+                    if (world.continu)
+                    {
+                        world.timeStep++;
+                        world.Generate();
+                        ConsoleDraw();
+                    }
+                    else
+                        break;
+                    
                 }
             }
 
@@ -258,9 +264,10 @@ namespace GameOfLife
             Console.WriteLine(" " + line);
             int[] count = world.GetTheCounts();
             Console.WriteLine("\nGreenFlies: " + count[0] + "|||" + "Ladybirds: " + count[1] + "|||" + "TimeStep: " + world.timeStep + "|||" + "Speed: " + SimulationSpeed + "|||" + "Mode: " + Mode);
-            Console.WriteLine("To change settings press (s), To continue press Enter, To start a new world press (n),otherwise press Escape (ESC) key to end the game.");
+            Console.WriteLine("To change settings press (s), To continue press Enter, To start a new world press (n), Otherwise press Escape (ESC) key to end the game.");
             Console.WriteLine();
             Console.WriteLine();
         }
+
     }
 }
