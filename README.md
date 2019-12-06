@@ -62,3 +62,9 @@ Let's say you did two simulation in one game, the following files will be genera
 1. Information1.txt
 2. Table1w1.csv {the second 1 is the id}
 3. Table1w2.csv {2 is the id}
+
+## Creating Graph
+
+You can use the CSVToGraph.py program to create simple line graph from the Table.csv files generated from GameOfLife simulation, you can enter multiple files names at once just separate them by space.
+
+*N.B To see the next figure close current one.*
