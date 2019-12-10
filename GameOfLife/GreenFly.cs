@@ -16,7 +16,7 @@ namespace GameOfLife
             /// [1] choose a random cell.
             /// [2] if the cell is outside the grid we keep looping until we find a cell inside the grid.
             ///     this approach has a problem if the grid has only 1 cell, it will get stuck in a loop.
-            /// [3] if the choosen cell is empty then move there.
+            /// [3] if the chosen cell is empty then move there.
 
             //[1]
             int randDir = rand.Next(0, 4); // Min = 0 ||| Max = 3.
@@ -41,10 +41,10 @@ namespace GameOfLife
 
         public void Breed(Cell[,] grid, List<GreenFly> greenFlies)
         {
-            //This method handls the breed part for greenfly, it has two main parts:
-            
+            //This method handle the breed part for greenfly, it has two main parts:
+
             //[1] (for loop) it checks the four cells (up, down, right, left) close to the greenfly and add empty cells to the list.
-            //[2] (if part) if empty cells were found, a random cell is choosen to create a new greenfly in it.
+            //[2] (if part) if empty cells were found, a random cell is chosen to create a new greenfly in it.
 
             List<int[]> possibleCells = new List<int[]>();
             int[] breedCell;

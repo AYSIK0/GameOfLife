@@ -25,7 +25,7 @@ namespace GameOfLife
         private int totalNumOfGf = 0, totalNumOfLb = 0;
         private int highestNumOfGf = 0, highestNumOfLb = 0;
         private int lowestNumOfGf, lowestNumOfLb;
-        private float avergaeNumOfGf = 0f, avergaeNumOfLb = 0f;
+        private float averageNumOfGf = 0f, averageNumOfLb = 0f;
 
         public World(int L, int W, int GFs, int LBs)
         {
@@ -69,7 +69,7 @@ namespace GameOfLife
         {
             /// The method generate the world, it has two parts:
             /// 1. When the world is empty (else part).
-            /// 2. When the world has been craeted (if part) the method will call other methods to make the neccessary changes.
+            /// 2. When the world has been created (if part) the method will call other methods to make the necessary changes.
 
             if (cells != null) // [2]
             {
@@ -77,7 +77,7 @@ namespace GameOfLife
                 ChangeGreenflies();
                 graphValues.Add(timeStep, new int[] { greenflies.Count, ladybirds.Count });
 
-                continu &= (ladybirds.Count != 0 && greenflies.Count != 0); // Checking if the number of greenflies or ladybirds has reachead 0
+                continu &= (ladybirds.Count != 0 && greenflies.Count != 0); // Checking if the number of greenflies or ladybirds has reached 0.
             }
 
             else //[1]
@@ -175,7 +175,7 @@ namespace GameOfLife
         private void ChangeLadybirds() // This method Move and Breed Ladybirds.
         {
             // We iterate starting at the end of the list for two reasons:
-            // 1.If a ladybird is removed we don't want to try an access an element that doesn't exist.
+            // 1.If a ladybird is removed, we don't want to try an access an element that doesn't exist.
             // 2.When new ladybirds are added we won't loop over them until next turn.
 
             for (int L = ladybirds.Count - 1; L >= 0; L--)
@@ -253,13 +253,13 @@ namespace GameOfLife
 
             if (timeStep > 0) 
             {
-                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep); // Average Number of Greenflies per turn.
-                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep); // Average Number of Ladybirds per turn.
+                averageNumOfGf = Convert.ToSingle(totalNumOfGf) / Convert.ToSingle(timeStep); // Average Number of Greenflies per turn.
+                averageNumOfLb = Convert.ToSingle(totalNumOfLb) / Convert.ToSingle(timeStep); // Average Number of Ladybirds per turn.
             }
             else // When Time Step = 0
             {
-                avergaeNumOfGf = Convert.ToSingle(totalNumOfGf);
-                avergaeNumOfLb = Convert.ToSingle(totalNumOfLb);
+                averageNumOfGf = Convert.ToSingle(totalNumOfGf);
+                averageNumOfLb = Convert.ToSingle(totalNumOfLb);
             }
         }
 
@@ -270,7 +270,7 @@ namespace GameOfLife
             string infoFileName, currentDir, infoPathString;
             if (filePaths == null)
             {
-                // We keep genrating file names until one of them doen't already exist in the current directory.
+                // We keep generating file names until one of them doesn't already exist in the current directory.
                 do
                 {
                     fileNumber++;
@@ -283,7 +283,7 @@ namespace GameOfLife
                 filePaths[0] =  infoPathString;
             }
 
-            // Inforamtion File.
+            // Information File.
             using (StreamWriter infoFile = File.AppendText(filePaths[0]))
             {
                 infoFile.WriteLine("General Information About World {0}.\n", id);
@@ -293,8 +293,8 @@ namespace GameOfLife
                 infoFile.WriteLine("Start Number for Ladybirds: {0}", startLadybirdNums);
                 infoFile.WriteLine("Highest Number of Greenflies: " + highestNumOfGf);
                 infoFile.WriteLine("Highest Number of Ladybirds: " + highestNumOfLb);
-                infoFile.WriteLine("Average number of Greenflies per turn: " + avergaeNumOfGf);
-                infoFile.WriteLine("Average number of Ladybirds per turn: " + avergaeNumOfLb);
+                infoFile.WriteLine("Average number of Greenflies per turn: " + averageNumOfGf);
+                infoFile.WriteLine("Average number of Ladybirds per turn: " + averageNumOfLb);
                 infoFile.WriteLine("Lowest number of Greenflies: {0}", lowestNumOfGf);
                 infoFile.WriteLine("Lowest number of Ladybirds: {0}", lowestNumOfLb);
                 infoFile.WriteLine("\n");

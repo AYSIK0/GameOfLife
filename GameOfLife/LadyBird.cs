@@ -74,10 +74,10 @@ namespace GameOfLife
 
                 if (grid[nextcell[0], nextcell[1]].content == ' ') // if the next cell is empty then move the ladybird.
                 {
-                    grid[row, column].content = ' '; // Emptying the orignal location of ladybird since it moved.
+                    grid[row, column].content = ' '; // Emptying the original location of ladybird since it moved.
                     row = nextcell[0];
                     column = nextcell[1];
-                    grid[row, column].content = shape; // Addi.ng the shape of ladybird to the new cell
+                    grid[row, column].content = shape; // Changing the shape of cell to the shape of ladybird.
                 }
 
                 notEating++;
@@ -87,10 +87,10 @@ namespace GameOfLife
 
         public void Breed(Cell[,] grid, List<LadyBird> ladyBirds)
         {
-            //This method handls the breed part for ladybird, it has two main parts:
+            //This method handle the breed part for ladybird, it has two main parts:
 
             //[1] (for loop) it checks the four cells (up, down, right, left) close to the ladybird and add empty cells to the list.
-            //[2] (if part) if empty cells were found, a random cell is choosen to create a new ladybird in it.
+            //[2] (if part) if empty cells were found, a random cell is chosen to create a new ladybird in it.
 
             List<int[]> possibleCells = new List<int[]>();
             int[] breedCell;
