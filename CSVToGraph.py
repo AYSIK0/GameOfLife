@@ -47,4 +47,5 @@ if table_files:
         plt.ylabel("Creatures Number")
         plt.title('Line Graph For Greenflies and Ladybirds population overtime')
         plt.legend()
+        plt.grid()
         plt.show()
